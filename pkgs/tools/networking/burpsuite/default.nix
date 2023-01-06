@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = jdk19.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [ bennofs bamhm182 ];
   };
 }

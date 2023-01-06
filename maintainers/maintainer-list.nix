@@ -1558,6 +1558,12 @@
     githubId = 18467667;
     name = "Alexander Bantyev";
   };
+  bamhm182 = {
+    email = "bamhm182@gmail.com";
+    github = "bamhm182";
+    githubId = 920269;
+    name = "Dylan Wilson";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bennyandresen";
