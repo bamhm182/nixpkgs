@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
+{ lib, stdenv, fetchurl, jdk19, runtimeShell, unzip, chromium, proVersion ? false }:
 
 stdenv.mkDerivation rec {
   pname = "burpsuite";
-  version = "2021.12";
+  product = if proVersion then "pro" else "community";
+  sha = if proVersion then "sha256-LiLXWbztWv74fuVfKhAgPCTGK6NoS+/iJ2phCCs27ic=" else "sha256-rJ3Runuelg+wJfut6e5L0uVGeYoAkNK+VGRn1BsLnXM=";
+  version = "2022.12.5";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+      "https://portswigger.net/Burp/Releases/Download?product=${product}&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?product=${product}&version=${version}&type=Jar"
     ];
-    sha256 = "sha256-BLX/SgHctXciOZoA6Eh4zuDJoxNSZgvoj2Teg1fV80g=";
+    sha256 = sha;
   };
 
   dontUnpack = true;
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
     mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
     ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
-    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
+    exec ${jdk19}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
     chmod +x $out/bin/burpsuite
 
     runHook postInstall
@@ -40,10 +42,10 @@ stdenv.mkDerivation rec {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
-    downloadPage = "https://portswigger.net/burp/freedownload";
+    downloadPage = "https://portswigger.net/burp/releases";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = jdk11.meta.platforms;
+    platforms = jdk19.meta.platforms;
     hydraPlatforms = [];
     maintainers = with maintainers; [ bennofs ];
   };
